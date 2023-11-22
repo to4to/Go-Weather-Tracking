@@ -46,14 +46,29 @@ func hello(w http.ResponseWriter, r *http.Request) {
 
 func query(city string) (weatherData, error) {
 
-	apiConfig,err:=apiConfigData(".apiConfig")
+	apiConfig, err := apiConfigData(".apiConfig")
+
+	if err != nil {
+		return weatherData{}, err
+	}
+
+	resp,err:=http.Get("http://api.openweathermap.org/data/2.5/weather?APPID=" + apiConfig.OpenWeatherMapApiKey + "&q" + city)
 
 	if err!=nil{
 		return weatherData{},err
 	}
 
+	defer resp.Body.Close()
 
-	http.GET("http://api.openweathermap.org/data/2.5/weather?APPID="+apiConfig.OpenWeatherMapApiKey)
+
+	var d weatherData
+	json.NewDecoder(resp.Body).Decode(&d)
+
+	if err!=nil{
+		return weatherData{},err
+	}
+
+	return d,nil
 
 }
 
