@@ -18,3 +18,9 @@ type weatherData struct{
 		Kelvin float64 `json:"temp"`
 	}`json:"main"`
 }
+
+func loadApiConfig(filename string) (apiConfigData){
+
+
+	
+}
